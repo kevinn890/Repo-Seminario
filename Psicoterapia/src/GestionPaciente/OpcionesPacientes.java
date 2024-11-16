@@ -21,8 +21,7 @@ public class OpcionesPacientes extends JFrame {
 	private VentanaPrincipal v1;
 	RegistroPacientes1 v2 = new RegistroPacientes1();
 	BuscarPaciente v3 = new BuscarPaciente();
-	ModificarPaciente v4 = new ModificarPaciente();
-	EliminarPaciente v5 = new EliminarPaciente();
+	
 
 	
 	
@@ -61,45 +60,25 @@ public class OpcionesPacientes extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				v2.setV1(OpcionesPacientes.this);
+				v2.actualizarCombo1();
 				v2.setVisible(true);
 				setVisible(false);
 			}
 		});
-		btnNewButton.setBounds(23, 109, 207, 23);
+		btnNewButton.setBounds(23, 109, 262, 43);
 		contentPane.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Buscar paciente");
+		JButton btnNewButton_1 = new JButton("Buscar paciente, \r\nmodificar datos o \r\nborrar");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				v3.setV1(OpcionesPacientes.this);
+				v3.actualizarCombo1();
 				v3.setVisible(true);
 				setVisible(false);
 			}
 		});
-		btnNewButton_1.setBounds(23, 143, 207, 23);
+		btnNewButton_1.setBounds(23, 163, 262, 49);
 		contentPane.add(btnNewButton_1);
-		
-		JButton btnNewButton_2 = new JButton("Modificar datos de paciente");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				v4.setV1(OpcionesPacientes.this);
-				v4.setVisible(true);
-				setVisible(false);
-			}
-		});
-		btnNewButton_2.setBounds(23, 177, 207, 23);
-		contentPane.add(btnNewButton_2);
-		
-		JButton btnNewButton_3 = new JButton("Eliminar paciente");
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				v5.setV1(OpcionesPacientes.this);
-				v5.setVisible(true);
-				setVisible(false);
-			}
-		});
-		btnNewButton_3.setBounds(23, 211, 207, 23);
-		contentPane.add(btnNewButton_3);
 		
 		JButton btnNewButton_4 = new JButton("Atras");
 		btnNewButton_4.addActionListener(new ActionListener() {

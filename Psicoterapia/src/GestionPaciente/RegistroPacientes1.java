@@ -20,6 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 
 public class RegistroPacientes1 extends JFrame {
 
@@ -32,7 +34,7 @@ public class RegistroPacientes1 extends JFrame {
 	private JTextField PacApellido;
 	private JLabel lblNewLabel_1_1_5;
 	private JTextField PacNombres;
-	private JTextField PacNacimiento;
+	private JDateChooser PacNacimiento;
 	private JLabel lblNewLabel_1_1_6;
 	private JTextField PacEmail;
 	private JLabel lblNewLabel_1_1_7;
@@ -44,17 +46,88 @@ public class RegistroPacientes1 extends JFrame {
 	private JCheckBox PacDerivado;
 	private JTextField PacEstado;
 	private JLabel PacEstado123;
-	private JTextField textField;
-	private JLabel PacDomici;
+	private JTextField PacDomici;
+	private JLabel PacDomicili;
 	private JCheckBox PacPsiqui;
 	private JTextField PacEMTelefono;
 	private JTextField PacEMNombre;
 	private JTextField PacIDObraSocial;
 	private JComboBox PacOS;
+	private int contCombo =0;
 	
 	
 	public void setV1(OpcionesPacientes v1) {
 		this.v1 = v1;
+	}
+	
+	
+public void actualizarCombo1() {
+		
+		//conexion con la BD
+		Conexion.ConexionBD conexion = new Conexion.ConexionBD();
+	    Connection con = conexion.conectar();
+		
+		try {
+			PacOS.removeAllItems();
+			String consulta = "SELECT nombre FROM obrasocial";
+    	    PreparedStatement ps1 = con.prepareStatement(consulta);	
+    	    ResultSet rs = ps1.executeQuery();
+    	    	while(rs.next()==true) {
+    			    PacOS.addItem(rs.getString(1));
+    	    	}
+			
+		}catch(Exception ex) {
+			JOptionPane.showMessageDialog(null, "No se pudo actualizar combo"+ex);
+		}finally {
+			try {
+				con.close();
+			}catch(Exception exc) {
+				JOptionPane.showMessageDialog(null, "No se pudo cerrar la conexion"+exc);
+			}
+		}
+		
+		
+	}
+	
+	public void actualizarCombo() {
+		
+		//conexion con la BD
+		Conexion.ConexionBD conexion = new Conexion.ConexionBD();
+	    Connection con = conexion.conectar();
+		
+		try {
+			String consulta = "SELECT nombre FROM obrasocial";
+    	    PreparedStatement ps1 = con.prepareStatement(consulta);	
+    	    ResultSet rs = ps1.executeQuery();
+    	    int cont=0;
+    	    if(contCombo==0) {
+    	    	while(rs.next()==true) {
+    			    PacOS.addItem(rs.getString(1));
+    			    contCombo++;
+    	    	}
+    	    }else {
+    	    	while(rs.next()) {
+    	    		cont++;
+    	    		System.out.println("contador"+cont);
+    	    		if(contCombo<cont) {
+    	    			PacOS.addItem(rs.getString(1));
+        			    contCombo++;
+    	    		}
+    	    	}
+    		
+    		}
+			
+		}catch(Exception ex) {
+			JOptionPane.showMessageDialog(null, "No se pudo actualizar combo"+ex);
+		}finally {
+			try {
+				con.close();
+			}catch(Exception exc) {
+				JOptionPane.showMessageDialog(null, "No se pudo cerrar la conexion"+exc);
+			}
+		}
+		
+		
 	}
 
 	/**
@@ -113,30 +186,32 @@ public class RegistroPacientes1 extends JFrame {
 				String dni = PacDni.getText();
 				String telefono = PacTelefono.getText();
 				String domicilio = PacDomici.getText();
-				String nacimiento = PacNacimiento.getText();
+				String nacimiento = ((JTextField)PacNacimiento.getDateEditor().getUiComponent()).getText();
 				int psiqui = valorCheck(PacPsiqui);
-				int deri = valorCheck(PacPsiqui);
+				int deri = valorCheck(PacDerivado);
 				String emerNombre = PacEMNombre.getText();
 				String emerTelefono = PacEMTelefono.getText(); 
 				String estadoCivil = PacEstado.getText();
 				String obraSocial = PacOS.getSelectedItem().toString();
 				String diagnostico = PacIDObraSocial.getText();
-				int IDObrasocial;
-			   
+				int IDObrasocial=0;
+				
+			    //System.out.print("obrasocial"+obraSocial);
 				
 				if (nombre.isEmpty()||apellido.isEmpty()||email.isEmpty()||cuil.isEmpty()||dni.isEmpty()||telefono.isEmpty()||domicilio.isEmpty()||nacimiento.isEmpty()||emerNombre.isEmpty()||emerTelefono.isEmpty()||estadoCivil.isEmpty()||obraSocial.isEmpty()||diagnostico.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "debe completar todos los datos");
 				}else {
-					try {
-						String consulta1 = "SELECT idObraSocial FROM obrasocial WHERE nombre LIKE '%"+obraSocial+"%' ";
-					    Statement ps1 = con.createStatement();
-			    
-		
-						ResultSet rs = ps1.executeQuery(consulta1);
-						IDObrasocial = rs.getInt(1);
-						System.out.println("id obrasocial"+IDObrasocial);
+					try {						
 						
-						String consulta = "INSERT INTO paciente (dni, cuil, nombre, apellido, email, telefono, domicilio, estadoCivil, pacientePsiquiatrico, pacienteDerivado, diagnosticoPresuntivo, contEmerNombre, contEmerTelefono, ObraSocial_idObraSocial) VALUES ('"+dni+"', '"+cuil+"', '"+nombre+"', '"+apellido+"', '"+email+"', '"+telefono+"', '"+domicilio+"', '"+estadoCivil+"', '"+psiqui+"', '"+deri+"', '"+diagnostico+"', '"+emerNombre+"', '"+emerTelefono+"', '"+obraSocial+"')";
+					    PreparedStatement ps1 = con.prepareStatement("SELECT idObraSocial FROM obrasocial WHERE nombre LIKE ?");
+					    ps1.setString(1,obraSocial);
+						ResultSet rs = ps1.executeQuery();
+						while(rs.next()==true) {
+							IDObrasocial = rs.getInt(1);
+						}
+
+						
+						String consulta = "INSERT INTO paciente (dni, cuil, nombre, apellido, email, telefono, domicilio, estadoCivil, pacientePsiquiatrico, pacienteDerivado, diagnosticoPresuntivo, contEmerNombre, contEmerTelefono, ObraSocial_idObraSocial,fechaNacimiento) VALUES ('"+dni+"', '"+cuil+"', '"+nombre+"', '"+apellido+"', '"+email+"', '"+telefono+"', '"+domicilio+"', '"+estadoCivil+"', '"+psiqui+"', '"+deri+"', '"+diagnostico+"', '"+emerNombre+"', '"+emerTelefono+"', '"+IDObrasocial+"', '"+nacimiento+"')";
 						PreparedStatement ps = con.prepareStatement(consulta);
 						ps.executeUpdate();
 						JOptionPane.showMessageDialog(null, "paciente Registrado correctamente");
@@ -222,8 +297,8 @@ public class RegistroPacientes1 extends JFrame {
 		PacNombres.setBounds(10, 184, 88, 20);
 		contentPane.add(PacNombres);
 		
-		PacNacimiento = new JTextField();
-		PacNacimiento.setColumns(10);
+		PacNacimiento = new JDateChooser();
+		PacNacimiento.setDateFormatString("yyyy-MM-dd");
 		PacNacimiento.setBounds(10, 230, 88, 20);
 		contentPane.add(PacNacimiento);
 		
@@ -281,15 +356,15 @@ public class RegistroPacientes1 extends JFrame {
 		PacEstado123.setBounds(108, 169, 88, 14);
 		contentPane.add(PacEstado123);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(108, 149, 88, 20);
-		contentPane.add(textField);
-		
-		PacDomici = new JLabel("DOMICILIO");
-		PacDomici.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		PacDomici.setBounds(108, 134, 88, 14);
+		PacDomici = new JTextField();
+		PacDomici.setColumns(10);
+		PacDomici.setBounds(108, 149, 88, 20);
 		contentPane.add(PacDomici);
+		
+		PacDomicili = new JLabel("DOMICILIO");
+		PacDomicili.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		PacDomicili.setBounds(108, 134, 88, 14);
+		contentPane.add(PacDomicili);
 		
 		PacPsiqui = new JCheckBox("¿Paciente Psiquiatrico?");
 		PacPsiqui.setBounds(206, 148, 133, 23);
@@ -311,7 +386,6 @@ public class RegistroPacientes1 extends JFrame {
 		contentPane.add(PacIDObraSocial);
 		
 		PacOS = new JComboBox();
-		PacOS.setModel(new DefaultComboBoxModel(new String[] {"Largavida", "bienestar"}));
 		PacOS.setBounds(206, 69, 88, 22);
 		contentPane.add(PacOS);
 	}

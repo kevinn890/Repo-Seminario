@@ -8,7 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.mysql.cj.x.protobuf.MysqlxNotice.Frame;
 
-import GestionCitas.OpcionesCitas;
+import GestionCitas.BuscarCita;
 import GestionObraSocial.OpcionesObraSocial;
 import GestionPaciente.OpcionesPacientes;
 
@@ -22,7 +22,7 @@ public class VentanaPrincipal extends JFrame {
 
 	private JPanel contentPane;
 	OpcionesPacientes v2 = new OpcionesPacientes();
-	OpcionesCitas v3 = new OpcionesCitas();
+	BuscarCita v3 = new BuscarCita();
 	OpcionesObraSocial v4 = new OpcionesObraSocial();
 	OpcionesSesion v5 = new OpcionesSesion();
 
@@ -81,6 +81,7 @@ public class VentanaPrincipal extends JFrame {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				v3.setV1(VentanaPrincipal.this);
+				v3.llenarTabla(null);
 				v3.setVisible(true);
 				setVisible(false);
 			}
@@ -92,6 +93,7 @@ public class VentanaPrincipal extends JFrame {
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				v4.setV1(VentanaPrincipal.this);
+				v4.llenarTabla(null);
 				v4.setVisible(true);
 				setVisible(false);
 			}

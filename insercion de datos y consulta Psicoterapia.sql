@@ -6,10 +6,10 @@ VALUES (NULL,'Largavida','plan economico',01145545551),
 (null,'bienestar','plan estandar',01123324552);
 
 INSERT INTO paciente
-VALUES (45667887,30456678870,'roberto','perez','robertoperez@mail.com',0113443685,'belgrano 1122','soltero',1,0,'diagnostico de prueba 1','Gonzalez Pedro',01132345455,1),
-(54679833,20546798334,'flor', 'marin','flor@mail.com',01198992111,'roca 345','soltero',0,1,'diagnostico de prueba 1','aldana Barca',01154321223,1),
-(21099566,5021099566,'Pablo','Gomez','gpablo@mail.com',01124544342,'iriart 233','casado',1,1,'diagnotico de prueba 3','Gomez Ariel',01165667321,2),
-(45511233,30455112333,'Mariano', 'Roque','roque@mail.com',01144332211,'dellepiane 455','divorciado',0,0,'diagnostico de prueba 2','Heiden Marcela',01189912344,1);
+VALUES (45667887,30456678870,'roberto','perez','robertoperez@mail.com',0113443685,'belgrano 1122','soltero',1,0,'diagnostico de prueba 1','Gonzalez Pedro',01132345455,1,'2003-09-01'),
+(54679833,20546798334,'flor', 'marin','flor@mail.com',01198992111,'roca 345','soltero',0,1,'diagnostico de prueba 1','aldana Barca',01154321223,1,'1993-10-12'),
+(21099566,5021099566,'Pablo','Gomez','gpablo@mail.com',01124544342,'iriart 233','casado',1,1,'diagnotico de prueba 3','Gomez Ariel',01165667321,2,'1998-06-05'),
+(45511233,30455112333,'Mariano', 'Roque','roque@mail.com',01144332211,'dellepiane 455','divorciado',0,0,'diagnostico de prueba 2','Heiden Marcela',01189912344,1,'1987-03-08');
 
 INSERT INTO grupoconviviente
 VALUES (null,45667887,'padre','Marcos',45),
